@@ -10,7 +10,24 @@ exports.register = async(req,res) => {
 
 exports.edit = (req,res) => {
 
-    let company_uuid = req.body.uuid;
-    let post_id = req.body.post_id;
+    let company_id = Number(req.body.company_id);
+    let posting_id = Number(req.body.posting_id);
     
+    JobPosting.update(
+        {
+            position : req.body.position,
+            rewards : Number(req.body.rewards),
+            content : req.body.content,
+            tech_stack : req.body.tech_stack
+        },
+        {
+            where : {
+                company_id : company_id,
+                posting_id : posting_id
+            }
+        }
+    ).then(()=>{
+
+        res.redirect('/jobpost/detail/'+ posting_id);
+    })
 }
