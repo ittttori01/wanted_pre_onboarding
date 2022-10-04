@@ -16,7 +16,7 @@ exports.register = (req,res) => {
         
         res.status(200).json({
             uuid: uuid,
-            message : "Compayny Has Been Registered"
+            messege : "Compayny Has Been Registered"
         
         });
 
