@@ -1,11 +1,48 @@
 const JobPosting = require('../../model/Job_Posting');
 
+exports.list = async(req,res) => {
+
+    const lists = await JobPosting.findAll();
+
+    res.status(200).json({lists : lists});
+
+} 
+
 exports.register = async(req,res) => {
 
     await JobPosting.create(req.body);
 
     res.send('Content has been Posted');
     
+};
+
+exports.listDetail = async(req,res) => {
+
+    let posting_id = Number(req.body.posting_id);
+    let company_id = Number(req.body.company_id);
+
+    // const details = await JobPosting.findOne({
+    //     posting_id  : posting_id,
+    // })
+
+    // const getRelated = await JobPosting.findAll({
+    //     company_id : company_id
+    // })
+
+    // console.log(details);
+    // console.log();
+
+    const details = await JobPosting.findAll({
+        include : [
+            {
+                model : JobPosting,
+                attributes : ['position','salary','content','tech_stack']
+            }
+        ],
+        where : {posting_id : posting_id, company_id : company_id}
+    });
+
+    res.send(details)
 };
 
 exports.edit = (req,res) => {

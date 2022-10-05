@@ -13,7 +13,7 @@ const JobPosting = sequelize.define('job_posting',{
     position : {
         type : DataTypes.STRING
     },
-    rewards : {
+    salary : {
         type : DataTypes.INTEGER
     },
     content : {

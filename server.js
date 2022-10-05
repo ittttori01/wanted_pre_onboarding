@@ -1,6 +1,5 @@
 const express = require('express');
 const sequelize = require('./database');
-const Company = require('./Company');
 
 sequelize.sync({force:true}).then(()=>{
     
@@ -28,8 +27,6 @@ app.use(express.json());
 
 const router = require('./routes')(app);
 
-
-console.log(Company)
 app.listen(3000,()=>{
 
     console.log("APP IS RUNNING");

@@ -1,6 +1,5 @@
-const Company = require('../../Company');
+const Company = require('../../model/Company');
 const _uuid = require('uuid');
-const _crypto = require('crypto');
 
 exports.register = (req,res) => {
     
@@ -9,6 +8,7 @@ exports.register = (req,res) => {
     Company.create({
 
         uuid : uuid,
+        name : req.body.name,
         country : req.body.country,
         region : req.body.region
     })
