@@ -9,7 +9,7 @@ const Router = (app) => {
     app.get("/list/:posting_id",(req,res) => JobPosting.listDetail(req,res));
     app.post("/list",(req,res) => JobPosting.register(req,res));
     app.put("/list/edit",(req,res)=> JobPosting.edit(req,res));
-    app.delete("/list/remove",(req,res) => JobPosting.remove(req,res));
+    app.delete("/list",(req,res) => JobPosting.remove(req,res));
 
 };
   

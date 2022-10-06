@@ -3,4 +3,6 @@ const sq = new Sequelize({
     dialect: 'sqlite',
     db: './db/my.db'
 });
-module.exports = {Sequelize, sq};
+
+const Op = require('sequelize');
+module.exports = {Sequelize, sq,Op};
