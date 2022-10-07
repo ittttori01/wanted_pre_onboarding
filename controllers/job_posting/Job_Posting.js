@@ -17,34 +17,34 @@ exports.register = async(req,res) => {
     
 };
 
-exports.listDetail = async(req,res) => {
+// exports.listDetail = async(req,res) => {
 
-    let posting_id = Number(req.body.posting_id);
-    let company_id = Number(req.body.company_id);
+//     let posting_id = Number(req.body.posting_id);
+//     let company_id = Number(req.body.company_id);
 
-    // const details = await JobPosting.findOne({
-    //     posting_id  : posting_id,
-    // })
+//     // const details = await JobPosting.findOne({
+//     //     posting_id  : posting_id,
+//     // })
 
-    // const getRelated = await JobPosting.findAll({
-    //     company_id : company_id
-    // })
+//     // const getRelated = await JobPosting.findAll({
+//     //     company_id : company_id
+//     // })
 
-    // console.log(details);
-    // console.log();
+//     // console.log(details);
+//     // console.log();
 
-    const details = await JobPosting.findAll({
-        include : [
-            {
-                model : JobPosting,
-                attributes : ['position','salary','content','tech_stack']
-            }
-        ],
-        where : {posting_id : posting_id, company_id : company_id}
-    });
+//     const details = await JobPosting.findAll({
+//         include : [
+//             {
+//                 model : JobPosting,
+//                 attributes : ['position','salary','content','tech_stack']
+//             }
+//         ],
+//         where : {posting_id : posting_id, company_id : company_id}
+//     });
 
-    res.send(details)
-};
+//     res.send(details)
+// };
 
 exports.edit = (req,res) => {
 
@@ -103,76 +103,27 @@ exports.remove = (req,res) => {
 }
 
 
-exports.listDetail = (req,res) => {
+exports.listDetail = async (req,res) => {
 
-    // const user = await User.findOne({
-    //     where: { lastName: "Doe" },
-    //   });
+    let posting_id = Number(req.params.posting_id);
 
-    const getDetail = () => {
-
-        return new Promise((resolve,reject) => {            
-
-        let posting_id = Number(req.params.posting_id);
-
-        JobPosting.findAll({
-            where : {
-                posting_id : posting_id
-            }
-        })
-        .then((posting)=>{
-
-            resolve(posting);
-        })
-        .catch((err) => {
-
-            console.log(err);
-
-            res.status(404);
-        });
-
-        })
-    }
-
-    const getRelated = (posting) => {
-
-        console.log(posting)
-        return new Promise((resolve,reject) => {
-
-            JobPosting.findAll({
+    const detail = await JobPosting.findOne({
         
-                where : {
-                    posting_id :{[Op.not]:posting[0].posting_id},
-                    company_id : Number(posting[0].company_id)
-                }
-            })
-            .then((related)=>{
+        where : {
 
-                console.log(posting,related)
-                // res.status(201).json(posting,related)
-                // res.send(posting,related)
-            });
-
-        })
-    }
-    // console.log(posting.company_id)
-
-
-    const run = async() => {
-
-        try {
-            let info = await getDetail();
-            await getRelated(info);
-        } catch (err) {
-            console.log(err);
+            posting_id : posting_id
         }
-    }
+        
+    });
 
-    run();
-    
 
-    // res.status(200).json(posting,related);
+    const getRelated = await JobPosting.findAll({
 
-    // // res.send(posting.company_id)
+        where : {
+            company_id : detail.company_id
+        }
 
+    })
+
+    res.status(201).json({listt : getRelated});
 }
