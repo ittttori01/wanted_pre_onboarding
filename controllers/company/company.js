@@ -1,4 +1,4 @@
-const Company = require('../../model/Company');
+const Company = require('../../model/Company_Model');
 const _uuid = require('uuid');
 
 exports.register = (req,res) => {

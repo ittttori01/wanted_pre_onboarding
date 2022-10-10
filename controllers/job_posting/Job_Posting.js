@@ -1,9 +1,52 @@
-const JobPosting = require('../../model/Job_Posting');
-const Op = require('sequelize');
+const JobPosting = require('../../model/Job_Posting_Model');
+const Company = require('../../model/Company_Model');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op
 
 exports.list = async(req,res) => {
 
-    const lists = await JobPosting.findAll();
+    let keyword = (req.query.keyword && req.query.trim()) ||  "";
+
+    const lists = await JobPosting.findAll({
+        include : [
+            {
+                model:Company,
+                required: true,
+                attributes : ['name','country','region'],
+                where : {
+                    [Op.or] : [
+                        {
+                            name : {
+                                [Op.like] : `${keyword}%`
+                            },
+                            country : {
+                                [Op.like] : `${keyword}%`
+                            },
+                            region : {
+                                [Op.like] : `${keyword}%`
+                            },
+                        }
+                    ]
+                }
+            }
+        ],
+        where : {
+            [Op.or] : [
+                {
+                    content : {
+                        [Op.like] : `${keyword}%`
+                    },
+                    position : {
+                        [Op.like] : `${keyword}%`
+                    },
+                    tech_stack : {
+                        [Op.like] : `${keyword}%`
+                    },
+                }
+            ]
+        }
+    });
+
 
     res.status(200).json({lists : lists});
 
@@ -16,35 +59,6 @@ exports.register = async(req,res) => {
     res.send('Content has been Posted');
     
 };
-
-// exports.listDetail = async(req,res) => {
-
-//     let posting_id = Number(req.body.posting_id);
-//     let company_id = Number(req.body.company_id);
-
-//     // const details = await JobPosting.findOne({
-//     //     posting_id  : posting_id,
-//     // })
-
-//     // const getRelated = await JobPosting.findAll({
-//     //     company_id : company_id
-//     // })
-
-//     // console.log(details);
-//     // console.log();
-
-//     const details = await JobPosting.findAll({
-//         include : [
-//             {
-//                 model : JobPosting,
-//                 attributes : ['position','salary','content','tech_stack']
-//             }
-//         ],
-//         where : {posting_id : posting_id, company_id : company_id}
-//     });
-
-//     res.send(details)
-// };
 
 exports.edit = (req,res) => {
 
