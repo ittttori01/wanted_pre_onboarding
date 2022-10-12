@@ -56,7 +56,7 @@ exports.register = async(req,res) => {
 
     await JobPosting.create(req.body);
 
-    res.send('Content has been Posted');
+    res.status(201).json({message : "Posted"});
     
 };
 
