@@ -62,7 +62,6 @@ exports.register = async(req,res) => {
 
 exports.edit = (req,res) => {
 
-    let company_id = Number(req.body.company_id);
     let posting_id = Number(req.body.posting_id);
 
     JobPosting.update(
@@ -74,13 +73,12 @@ exports.edit = (req,res) => {
         },
         {
             where : {
-                company_id : company_id,
                 posting_id : posting_id
             }
         }
     ).then(()=>{
 
-        res.redirect('/jobpost/detail/'+ posting_id);
+        res.redirect('/list/'+posting_id);
     })
     .catch((err)=>{
 
@@ -95,13 +93,11 @@ exports.edit = (req,res) => {
 
 exports.remove = (req,res) => {
 
-    let company_id = Number(req.body.company_id);
     let posting_id = Number(req.body.posting_id);
 
     JobPosting.destroy(
         {
             where:{
-                company_id : company_id,
                 posting_id : posting_id
             }
         }
@@ -122,22 +118,18 @@ exports.listDetail = async (req,res) => {
     let posting_id = Number(req.params.posting_id);
 
     const detail = await JobPosting.findOne({
-        
-        where : {
+        include : [{
 
+            model : Company,
+            attributes : ['name','country','region'],
+            },
+        ],
+        where : {
             posting_id : posting_id
         }
         
     });
 
 
-    const getRelated = await JobPosting.findAll({
-
-        where : {
-            company_id : detail.company_id
-        }
-
-    })
-
-    res.status(201).json({listt : getRelated});
+    res.status(201).json({detail : detail});
 }
