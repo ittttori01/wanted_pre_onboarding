@@ -82,8 +82,6 @@ exports.edit = (req,res) => {
     })
     .catch((err)=>{
 
-        //없는 포스팅 아이디를 했을땐 무슨에러 찍히는지 보기 ,
-
         res.status(401).json({
 
             messege : "수정에 실패하였습니다. 다시 확인 해 주세요"
@@ -103,8 +101,8 @@ exports.remove = (req,res) => {
         }
     ).then(()=>{
         
-        res.send("DELETED")
-        // res.redirect('/list');
+        res.status(201).json({message : "deleted"});
+
     })
     .catch((err) =>{
 
