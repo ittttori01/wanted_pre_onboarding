@@ -7,7 +7,6 @@ exports.list = async(req,res) => {
 
     let keyword = (req.query.keyword && req.query.keyword.trim()) ||  "";
 
-    console.log(keyword)
     const lists = await JobPosting.findAll({
         where : {
             [Op.or] : [
