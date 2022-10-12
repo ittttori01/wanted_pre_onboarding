@@ -1,8 +1,8 @@
 const {DataTypes} = require('sequelize');
 const sequelize = require('../database');
-const Apply_Model = require('./Apply_Model');
+const _uuid = require('uuid');
 
-const User = sequelize.define('job_posting',{
+const User = sequelize.define('user',{
     user_id :{
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -42,6 +42,20 @@ const User = sequelize.define('job_posting',{
     collate: "utf8_general_ci",
 });
 
-User.hasMany(Apply_Model);
+let uuid = _uuid.v4();
+
+const testUser = User.build({
+    uuid : uuid,
+    family_name : "kim",
+    name : "Jung Kook",
+    email :"test@gmail.com",
+    phone : "01000000000",
+    tech_stack : "Node.js,Aws,Javascript"
+})
+
+(async () => {
+    await sequelize.sync({force:true})
+    await testUser.save()
+})();
 
 module.exports = User;

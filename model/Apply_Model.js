@@ -1,7 +1,7 @@
 const {DataTypes} = require('sequelize');
 const sequelize = require('../database');
 
-const Apply = sequelize.define('job_posting',{
+const Apply = sequelize.define('apply',{
     apply_id :{
         type: DataTypes.INTEGER,
         allowNull : false,

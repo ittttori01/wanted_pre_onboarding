@@ -1,6 +1,7 @@
 const {DataTypes} = require('sequelize');
 const sequelize = require('../database');
 const JobPosting = require('./Job_Posting_Model');
+const _uuid = require('uuid');
 
 const Company = sequelize.define('company',{
     company_id :{
@@ -32,7 +33,21 @@ const Company = sequelize.define('company',{
     collate: "utf8_general_ci",
 });
 
-Company.hasOne(JobPosting,{foreignKey : 'company_id'});
+let uuid = _uuid.v4();
+
+const testCompany = Company.build({
+    uuid : uuid,
+    name : "Wanted Co",
+    country : "Korea",
+    region : "Seoul"
+});
+
+(async () => {
+    await sequelize.sync({force:true});
+    await testCompany.save();
+})();
+
+Company.hasMany(JobPosting,{foreignKey : 'company_id'});
 JobPosting.belongsTo(Company,{foreignKey : 'company_id'});
 
 module.exports = Company;
