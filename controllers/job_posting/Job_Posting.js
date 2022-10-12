@@ -5,46 +5,59 @@ const Op = Sequelize.Op
 
 exports.list = async(req,res) => {
 
-    let keyword = (req.query.keyword && req.query.trim()) ||  "";
+    let keyword = (req.query.keyword && req.query.keyword.trim()) ||  "";
 
+    console.log(keyword)
     const lists = await JobPosting.findAll({
+        where : {
+            [Op.or] : [
+                {
+                    position: {
+                        [Op.like]: `%${keyword}%`,
+                    },
+                },
+                {
+                    rewards: {
+                        [Op.like]: `%${keyword}%`,
+                    },
+                },
+                {
+                    content: {
+                        [Op.like]: `%${keyword}%`,
+                    },
+                },
+                {
+                    tech_stack: {
+                        [Op.like]: `%${keyword}%`,
+                    },
+                },
+                {
+                    '$Company.name$' : {
+                        [Op.like]: `%${keyword}%`,
+                    }
+                },
+                {
+                    '$Company.country$' : {
+                        [Op.like]: `%${keyword}%`,
+                    }
+                },
+                {
+                    '$Company.region$' : {
+                        [Op.like]: `%${keyword}%`,
+                    }
+                },
+
+            ]
+        },
         include : [
             {
                 model:Company,
                 required: true,
                 attributes : ['name','country','region'],
-                where : {
-                    [Op.or] : [
-                        {
-                            name : {
-                                [Op.like] : `${keyword}%`
-                            },
-                            country : {
-                                [Op.like] : `${keyword}%`
-                            },
-                            region : {
-                                [Op.like] : `${keyword}%`
-                            },
-                        }
-                    ]
-                }
             }
         ],
-        where : {
-            [Op.or] : [
-                {
-                    content : {
-                        [Op.like] : `${keyword}%`
-                    },
-                    position : {
-                        [Op.like] : `${keyword}%`
-                    },
-                    tech_stack : {
-                        [Op.like] : `${keyword}%`
-                    },
-                }
-            ]
-        }
+
+
     });
 
 
